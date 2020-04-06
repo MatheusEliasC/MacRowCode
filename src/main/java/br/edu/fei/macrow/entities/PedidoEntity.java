@@ -1,4 +1,4 @@
-package br.edu.fei.macrow.database.entities;
+package br.edu.fei.macrow.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,19 +17,22 @@ public class PedidoEntity {
 	private String CodigosRecebidos;
 	
 	private String status;
+	
+	private Integer idCliente;
 
-	public PedidoEntity(String codigosRecebidos, String status) {
+	public PedidoEntity(String codigosRecebidos, String status, Integer idCliente) {
 		super();
 		CodigosRecebidos = codigosRecebidos;
 		this.status = status;
+		this.idCliente = idCliente;
+	}
+	
+	public PedidoEntity() {
+		super();
 	}
 
 	public Integer getId() {
 		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getCodigosRecebidos() {
@@ -48,6 +51,12 @@ public class PedidoEntity {
 		this.status = status;
 	}
 
-	
+	public Integer getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(Integer idCliente) {
+		this.idCliente = idCliente;
+	}
 	
 }

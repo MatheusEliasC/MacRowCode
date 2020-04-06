@@ -1,34 +1,37 @@
 package br.edu.fei.macrow.service.model;
 
 public class Pedido {
-	
-	public Pedido(int id, ProdutoModel[] pedidos, String status) {
-		super();
-		this.id =id;
-		this.pedidos = pedidos;
-		this.status = status;
-	}
 
-	private int id;
+	private Integer id;
 	
-	private ProdutoModel[] pedidos;
+	private Produto[] produtos;
 	
 	private String status;
 
-	public int getId() {
+	private Integer idCliente;
+	
+	public Pedido(int id,Produto[] produtos, String status, int idCliente) {
+		super();
+		this.id = id;
+		this.produtos = produtos;
+		this.status = status;
+		this.idCliente = idCliente;
+	}
+
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public ProdutoModel[] getPedidos() {
-		return pedidos;
+	public Produto[] getProdutos() {
+		return produtos;
 	}
 
-	public void setPedidos(ProdutoModel[] pedidos) {
-		this.pedidos = pedidos;
+	public void setProdutos(Produto[] produtos) {
+		this.produtos = produtos;
 	}
 
 	public String getStatus() {
@@ -39,6 +42,12 @@ public class Pedido {
 		this.status = status;
 	}
 
-	
+	public Integer getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(Integer idCliente) {
+		this.idCliente = idCliente;
+	}
 	
 }

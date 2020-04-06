@@ -1,14 +1,21 @@
 package br.edu.fei.macrow.service.model;
 
-public class ProdutoModel {
+public class Produto {
 
 	private int idProduto;
 	private String nome;
 	private int quantidade;
 	
-	public ProdutoModel(Integer idProduto, Integer quantidade) {
+	public Produto(Integer idProduto, Integer quantidade) {
 		super();
 		this.idProduto = idProduto;
+		this.quantidade = quantidade;
+	}
+	
+	public Produto(int idProduto, String nome, int quantidade) {
+		super();
+		this.idProduto = idProduto;
+		this.nome = nome;
 		this.quantidade = quantidade;
 	}
 
