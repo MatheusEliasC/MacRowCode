@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.edu.fei.macrow.entities.ClienteEntity;
+import br.edu.fei.macrow.entities.PedidoEntity;
 import br.edu.fei.macrow.services.ClienteService;
+import br.edu.fei.macrow.services.PedidoService;
 
 public class ValidarEntrada {
 	
@@ -39,13 +41,26 @@ public class ValidarEntrada {
 	}
 	
 	public static void validarCodigoCliente(String codigo, ClienteService service) {
-		Optional<ClienteEntity> teste = service.FindById(Integer.parseInt(codigo));
 		if(codigo.equals(null)|| codigo == "") {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do cliente incorreto!");
 		}
-
+		
+		Optional<ClienteEntity> teste = service.FindById(Integer.parseInt(codigo));
+		
 		if(!teste.isPresent()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do cliente não encontrado no banco!");
+		}
+	}
+	
+	public static void validarCodigoPedido(String codigo, PedidoService service) {
+		if(codigo.equals(null)|| codigo == "") {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do produto incorreto!");
+		}
+		
+		Optional<PedidoEntity> teste = service.FindById(Integer.parseInt(codigo));
+		
+		if(!teste.isPresent()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do produto não encontrado no banco!");
 		}
 	}
 		
@@ -59,13 +74,16 @@ public class ValidarEntrada {
 			}
 		}
 		
-		if(dadosString.length <3 || dadosString.length >=4) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "São necessários 3 dados para completar essa operação!");
+		if(dadosString.length <6 || dadosString.length >=7) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "São necessários 6 dados separados por @ para completar essa operação!");
 		}
 		
 		String Nome = dadosString[0];
 		String Login = dadosString[1];
 		String Senha = dadosString[2];
+		String Email = dadosString[3];
+		String Dominio = dadosString[4];
+		String Celular = dadosString[5];
 		
 		if(Nome.length()<3) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O nome deve conter no mínimo 3 caracteres!");
@@ -78,7 +96,7 @@ public class ValidarEntrada {
 		}else if(Login.length()>10) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O login contém muitos caracteres! O limite é de 10.");
 		}else if(Login.contains("[^a-zA-Z0-9]")) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O login não pode contem nenhuma caratere especial assim como espaços!");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O login não pode conter nenhum caratere especial assim como espaços!");
 		}
 		
 		if(Senha.length()<6) {
@@ -89,6 +107,24 @@ public class ValidarEntrada {
 //		else if(!Senha.contains("[^A-Z]")) {
 //			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A senha deve conter pelo menos 1 letra maiúscula!");
 //		}
+		
+		if(Email.length()<3) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O email deve conter no mínimo 3 caracteres! Fora o dominio ('dominio.com')");
+		}else if(Login.length()>20) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O email contém muitos caracteres! O limite é de 10. Além do domínio ('dominio.com')");
+		}else if(Login.contains("[^a-zA-Z0-9]")) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O email não pode conter nenhum caratere especial assim como espaços!");
+		}
+		
+		if(!Dominio.contains(".")) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O dominio do email deve conter um ponto! Exemplo ('dominio.com')");
+		}
+		
+		if(Celular.contains("[^0-9]")) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O celular não pode ter carateres diferentes de números.");
+		}else if(Celular.length()<11 || Celular.length()>=12) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O celular deve conter 11 números, sendo o DDD junto com o número.");
+		}
 		
 	}
 	

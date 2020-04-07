@@ -14,4 +14,6 @@ public interface ClienteService {
 	
 	public long quantidade();
 	
+	public void delete(int id);
+	
 }

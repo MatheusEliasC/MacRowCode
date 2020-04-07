@@ -1,8 +1,6 @@
 package br.edu.fei.macrow.entities;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,7 +9,6 @@ import javax.persistence.Table;
 public class PedidoEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	private String CodigosRecebidos;
@@ -20,8 +17,9 @@ public class PedidoEntity {
 	
 	private Integer idCliente;
 
-	public PedidoEntity(String codigosRecebidos, String status, Integer idCliente) {
+	public PedidoEntity(Integer id,String codigosRecebidos, String status, Integer idCliente) {
 		super();
+		this.id = id;
 		CodigosRecebidos = codigosRecebidos;
 		this.status = status;
 		this.idCliente = idCliente;

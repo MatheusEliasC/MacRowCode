@@ -1,6 +1,7 @@
 package br.edu.fei.macrow.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,11 @@ public class PedidoServiceImpl implements PedidoService{
 	@Override
 	public long quantidade() {
 		return pedidoRepository.count();
+	}
+
+	@Override
+	public Optional<PedidoEntity> FindById(int id) {
+		return pedidoRepository.findById(id);
 	}
 
 }

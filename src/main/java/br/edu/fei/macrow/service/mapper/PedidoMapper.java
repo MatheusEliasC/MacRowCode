@@ -3,9 +3,19 @@ package br.edu.fei.macrow.service.mapper;
 import br.edu.fei.macrow.entities.PedidoEntity;
 import br.edu.fei.macrow.service.model.Pedido;
 import br.edu.fei.macrow.service.model.Produto;
+import br.edu.fei.macrow.services.PedidoService;
 import br.edu.fei.macrow.services.ProdutoService;
 
 public class PedidoMapper {
+	
+	public static Integer findId(PedidoService service) {
+		for(int i =1;i<101;i++) {
+			if(!service.FindById(i).isPresent()) {
+				return i;
+			}
+		}
+		return null;
+	}
 	
 	public static Pedido converterPedido(int id,String entrada,String status, int idCliente) {
 		
