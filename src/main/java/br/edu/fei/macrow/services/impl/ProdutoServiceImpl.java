@@ -1,5 +1,6 @@
 package br.edu.fei.macrow.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,11 @@ public class ProdutoServiceImpl implements ProdutoService{
 	@Override
 	public Optional<ProdutoEntity> FindById(int id) {
 		return produtoRepository.findById(id);
+	}
+
+	@Override
+	public List<ProdutoEntity> getProdutos() {
+		return produtoRepository.findAll();
 	}
 	
 }

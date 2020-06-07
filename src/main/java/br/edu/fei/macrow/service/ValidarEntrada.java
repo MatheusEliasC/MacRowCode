@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.edu.fei.macrow.entities.ClienteEntity;
+import br.edu.fei.macrow.entities.FuncionarioEntity;
 import br.edu.fei.macrow.entities.PedidoEntity;
 import br.edu.fei.macrow.services.ClienteService;
+import br.edu.fei.macrow.services.FuncionarioService;
 import br.edu.fei.macrow.services.PedidoService;
 
 public class ValidarEntrada {
@@ -163,6 +165,33 @@ public class ValidarEntrada {
 //			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A senha deve conter pelo menos 1 letra maiúscula!");
 //		}
 		
+	}
+	
+	public static void validarEntradaStatusPedido(String entrada) {
+		
+		if(entrada.equals("") || entrada.equals(null)) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O status não pode ser vazio!");
+		}
+		else if(!entrada.equals("Preparando")|| !entrada.equals("Pronto") || !entrada.equals("Finalizado")) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Status inválido! Entradas possíveis: 'Preparando', 'Pronto' ou 'Finalizado'");
+		}
+		
+	
+	}
+	
+	public static void validarCodigoFuncionario(String codigo, FuncionarioService service) {
+		
+		if(codigo.equals(null)|| codigo == "") {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do funcionario incorreto!");
+		}
+		
+		Optional<FuncionarioEntity> teste = service.FindById(Integer.parseInt(codigo));
+		
+		if(!teste.isPresent()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do funcionario não encontrado no banco!");
+		}
+		
+	
 	}
 		
 }

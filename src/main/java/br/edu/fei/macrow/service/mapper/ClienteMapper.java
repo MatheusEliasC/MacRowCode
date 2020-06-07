@@ -1,5 +1,7 @@
 package br.edu.fei.macrow.service.mapper;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -57,6 +59,11 @@ public class ClienteMapper {
 		if(cliente.isVerificado() == false) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Conta não verificada.");
 		}
+		
+		service.delete(cliente.getId());
+		cliente.setLogado(true);
+		service.salvar(cliente);
+		
 		return cliente.getId();
 	
 	}
@@ -70,14 +77,56 @@ public class ClienteMapper {
 		
 	}
 	
-	public static void atualizarPedidoAtual(int codigo, ClienteService service) {
+	public static void verificarEAtualizarPedidoAtual(int codigoPedido, int codigoCliente,ClienteService service) {
 		
-		ClienteEntity cliente = service.FindById(codigo).get();
-		service.delete(codigo);
-		cliente.setPedido(codigo);
+		ClienteEntity cliente = service.FindById(codigoCliente).get();
+		
+		if(cliente.getPedido() != 0) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Já existe um pedido atual em andamento.");
+		}
+		
+		atualizarPedidoAtual(codigoPedido, codigoCliente, service);
+		
+	}
+	
+	public static void atualizarPedidoAtual(int codigoPedido,int codigoCliente, ClienteService service) {
+		
+		ClienteEntity cliente = service.FindById(codigoCliente).get();
+		
+		if(cliente.isLogado() == false) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Usuário não logado.");
+		}
+		
+		service.delete(codigoCliente);
+		cliente.setPedido(codigoPedido);
 		service.salvar(cliente);
 		
 	}
 	
+	public static int retornaIddoPedidoAtual(String codigoCliente, ClienteService clienteService) { 
+	
+	int id = Integer.parseInt(codigoCliente);
+	
+	Optional<ClienteEntity> clienteEntityOp = clienteService.FindById(id);
+	
+	if(!clienteEntityOp.isPresent()) {
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente não encontrado!");
+	}
+
+	ClienteEntity clienteEntity = clienteEntityOp.get();
+	
+	if(clienteEntity.isLogado()==false) {
+		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Usuário não logado.");
+	}
+		
+	int idPedido = clienteEntity.getPedido();
+	
+	if(idPedido == 0 ) {
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O cliente não tem nenhum pedido atual!");
+	}
+	
+	return idPedido;
+	
+	}
 	
 }

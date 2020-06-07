@@ -1,5 +1,10 @@
 package br.edu.fei.macrow.service.mapper;
 
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import br.edu.fei.macrow.entities.PedidoEntity;
 import br.edu.fei.macrow.service.model.Pedido;
 import br.edu.fei.macrow.service.model.Produto;
@@ -17,6 +22,16 @@ public class PedidoMapper {
 		return null;
 	}
 	
+	public static PedidoEntity encontrarEValidarPedidoEntityViaID(int idPedido, PedidoService pedidoService) {
+		Optional<PedidoEntity> pedidoEntity = pedidoService.FindById(idPedido);
+		
+		if(!pedidoEntity.isPresent()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pedido não encontrado!");
+		}
+		
+		return pedidoEntity.get();
+	}
+		
 	public static Pedido converterPedido(int id,String entrada,String status, int idCliente) {
 		
 		String[] pedidosString = entrada.split("_");
@@ -52,6 +67,28 @@ public class PedidoMapper {
 		String[] pedidosString = entity.getCodigosRecebidos().split("_");
 		
 		return pedidosString.length;
+	}
+	
+	public static int cancelarPedido(int id, PedidoService service) {
+		
+		PedidoEntity pedido = encontrarEValidarPedidoEntityViaID(id,service);
+
+		if(pedido.getStatus().equalsIgnoreCase("Adicionado") == false) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "O pedido ja esta sendo processado, não é possível cancelá-lo!");
+		}
+		
+		service.delete(pedido.getId());
+				
+		return pedido.getIdCliente();
+	}
+	
+	public static void atualizarStatus(int id, String novoStatus, PedidoService service) {
+		
+		PedidoEntity pedido = encontrarEValidarPedidoEntityViaID(id,service);
+		
+		pedido.setStatus(novoStatus);
+		service.delete(id);
+		service.salvar(pedido);
 	}
 	
 }

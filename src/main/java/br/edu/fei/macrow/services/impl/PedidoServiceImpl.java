@@ -42,4 +42,10 @@ public class PedidoServiceImpl implements PedidoService{
 		return pedidoRepository.findById(id);
 	}
 
+	@Override
+	public void delete(int id) {
+		pedidoRepository.deleteById(id);
+		
+	}
+
 }

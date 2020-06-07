@@ -16,4 +16,6 @@ public interface PedidoService {
 	
 	public long quantidade();
 	
+	public void delete(int id);
+	
 }
